@@ -1,4 +1,5 @@
 # Mirror all the repositories in the list
+# If the repository already exists, update it
 param (
     [string]$targetPath
 )
