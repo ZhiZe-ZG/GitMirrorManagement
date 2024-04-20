@@ -23,36 +23,41 @@ $URLList | ForEach-Object {
     }
     $localPath = Join-Path -Path $targetPath -ChildPath $repoName
     # check if the localPath exists
-    if (Test-Path $localPath) {
-        Write-Output "$repoName already exists, now updating"
-        $originalPath = Get-Location
-        Set-Location -Path $localPath
-        git fetch --all
-        Set-Location -Path $originalPath
-    }
-    else {
-        try {
-            Write-Output "Cloning $repoName to $localPath"
+    try {
+        if (Test-Path $localPath) {
+            Write-Host -ForegroundColor Yellow "$repoName already exists, now updating"
+            $originalPath = Get-Location
+            Set-Location -Path $localPath
+            git fetch --all
+            if ($LastExitCode -ne 0) {
+                throw "Command failed with exit code $LastExitCode"
+            }
+            Set-Location -Path $originalPath
+        }
+        else {
+            Write-Host -ForegroundColor Yellow "Cloning $repoName to $localPath"
             git clone --mirror $_ $localPath
             if ($LastExitCode -ne 0) {
                 throw "Command failed with exit code $LastExitCode"
             }
+        
+        
         }
-        catch {
-            # add the URL to FailedList
-            $FailedList += $repoName
-        }
+    }
+    catch {
+        # add the URL to FailedList
+        $FailedList += $repoName
     }
 }
 
 # Show all failed
 # check if the FailedList is empty
 if ($FailedList.Count -eq 0) {
-    Write-Host -ForegroundColor Green "All repositories are cloned successfully" 
+    Write-Host -ForegroundColor Green "All repositories are cloned or updated successfully" 
     exit 0
 }
 else {
-    Write-Host -ForegroundColor Red "Failed to clone the following repositories:" 
+    Write-Host -ForegroundColor Red "Failed to clone or update the following repositories:" 
     $FailedList | ForEach-Object {
         Write-Output $_
     }
