@@ -1,7 +1,7 @@
 function MirrorListRepositories (
     [string]$targetPath
 ) {
-    Write-Host "Starting to mirror all the repositories in the list... $targetPath"
+    Write-Host "Starting to mirror all the repositories in the list..."
     # Mirror all the repositories in the list
     # If the repository already exists, update it
 
