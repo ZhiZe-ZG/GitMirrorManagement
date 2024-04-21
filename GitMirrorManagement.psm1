@@ -8,7 +8,9 @@ function MirrorListRepositories (
 
     # Read the list of repositories from the file
     # Each line of this file is a URL of a repository
-    $URLList = Get-Content -Path $mirrorListFile
+    # ignore blank lines
+
+    $URLList = Get-Content -Path $mirrorListFile | Where-Object { $_ -match '\S' }
 
     $FailedList = @()
 
