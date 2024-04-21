@@ -1,17 +1,14 @@
 function MirrorListRepositories (
-    [string]$targetPath
+    [string]$mirrorListFile,
+    [string]$mirrorRootPath
 ) {
     Write-Host "Starting to mirror all the repositories in the list..."
     # Mirror all the repositories in the list
     # If the repository already exists, update it
 
-    $URLList = @(
-        "https://github.com/ZhiZe-ZG/zhize-zg.github.io",
-        "https://github.com/ZhiZe-ZG/GitMirrorManagement",
-        "https://github.com/ZhiZe-ZG/FFmpegCompressionScript",
-        "https://github.com/ZhiZe-ZG/sin-activator-paper",
-        "https://github.com/ZhiZe-ZG/sin-activator-experiment"
-    )
+    # Read the list of repositories from the file
+    # Each line of this file is a URL of a repository
+    $URLList = Get-Content -Path $mirrorListFile
 
     $FailedList = @()
 
@@ -23,7 +20,7 @@ function MirrorListRepositories (
         if ($repoName -notmatch "\.git$") {
             $repoName += ".git"
         }
-        $localPath = Join-Path -Path $targetPath -ChildPath $repoName
+        $localPath = Join-Path -Path $mirrorRootPath -ChildPath $repoName
         # check if the localPath exists
         try {
             if (Test-Path $localPath) {

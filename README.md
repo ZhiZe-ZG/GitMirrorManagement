@@ -17,8 +17,10 @@ You can replace `GitMirrorManagement.psm1` with the actual path of it.
 Mirror git repositories:
 
 ```powershell
-MirrorListRepositories /where/to/save/repos
+MirrorListRepositories /the/url/list /where/to/save/repos
 ```
+
+Write your own URL list, refer to `ZhiZeRepoList.txt`.
 
 Compress repositories:
 
