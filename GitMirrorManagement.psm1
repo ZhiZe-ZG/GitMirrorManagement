@@ -9,7 +9,8 @@ function MirrorListRepositories (
         "https://github.com/ZhiZe-ZG/zhize-zg.github.io",
         "https://github.com/ZhiZe-ZG/GitMirrorManagement",
         "https://github.com/ZhiZe-ZG/FFmpegCompressionScript",
-        "https://github.com/ZhiZe-ZG/sin-activator-paper"
+        "https://github.com/ZhiZe-ZG/sin-activator-paper",
+        "https://github.com/ZhiZe-ZG/sin-activator-experiment"
     )
 
     $FailedList = @()
