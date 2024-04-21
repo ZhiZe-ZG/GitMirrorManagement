@@ -14,20 +14,12 @@ You can replace `GitMirrorManagement.psm1` with the actual path of it.
 
 ## Usage
 
-Mirror git repositories:
+For example:
 
 ```powershell
-MirrorListRepositories /the/url/list /where/to/save/repos
-```
-
-Write your own URL list, refer to `ZhiZeRepoList.txt`.
-
-Compress repositories:
-
-```powershell
-CompressRepositories /where/the/repos/is /where/to/save/archives
+Backup-GitRepositories -mirrorListFilePath "E:\ZhiZeGitRepoList.txt" -mirrorRootPath "E:\GitRepositoriesMirror" -archiveRootPath "E:\GitRepositoriesArchive" -enableGitLFS $true
 ```
 
 ## Tricks
 
-"OneDrive will automatically sync the PowerShell startup script. This can be used to automatically configure on multiple computers.
+OneDrive will automatically sync the PowerShell startup script. This can be used to automatically configure on multiple computers.
