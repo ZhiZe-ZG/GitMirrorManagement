@@ -1,7 +1,7 @@
 function Sync-Repositories (
-    [string]$mirrorListFile,
+    [string[]]$urlList,
     [string]$mirrorRootPath,
-    [string]$enableGitLFS = $true
+    [bool]$enableGitLFS = $true
 ) {
     Write-Host "Starting to mirror all the repositories in the list..."
     # Mirror all the repositories in the list
@@ -16,16 +16,10 @@ function Sync-Repositories (
         }
     }
 
-    # Read the list of repositories from the file
-    # Each line of this file is a URL of a repository
-    # ignore blank lines
-
-    $URLList = Get-Content -Path $mirrorListFile | Where-Object { $_ -match '\S' }
-
     $FailedList = @()
 
     # Clone all the repositories
-    $URLList | ForEach-Object {
+    $urlList | ForEach-Object {
         # get the last part of the URL as the name of the repository
         $repoName = $_ -split "/" | Select-Object -Last 1
         # check if the repoName ends with ".git"
@@ -41,7 +35,13 @@ function Sync-Repositories (
                 Set-Location -Path $localPath
                 git fetch --all
                 if ($LASTEXITCODE -ne 0) {
-                    throw "Command failed with exit code $LASTEXITCODE"
+                    throw "git fetch failed with exit code $LASTEXITCODE"
+                }
+                if ($enableGitLFS) {
+                    git lfs fetch --all
+                    if ($LASTEXITCODE -ne 0) {
+                        throw "git lfs fetch failed with exit code $LASTEXITCODE"
+                    }
                 }
                 Set-Location -Path $originalPath
             }
@@ -49,10 +49,17 @@ function Sync-Repositories (
                 Write-Host -ForegroundColor Yellow "Cloning $repoName to $localPath"
                 git clone --mirror $_ $localPath
                 if ($LASTEXITCODE -ne 0) {
-                    throw "Command failed with exit code $LASTEXITCODE"
+                    throw "git clone failed with exit code $LASTEXITCODE"
                 }
-        
-        
+                if ($enableGitLFS) {
+                    $originalPath = Get-Location
+                    Set-Location -Path $localPath
+                    git lfs fetch --all
+                    if ($LASTEXITCODE -ne 0) {
+                        throw "git lfs fetch failed with exit code $LASTEXITCODE"
+                    }
+                    Set-Location -Path $originalPath
+                }
             }
         }
         catch {

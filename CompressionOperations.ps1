@@ -1,10 +1,10 @@
-function CompressRepositories(
-    [string]$InPath,
-    [string]$OutPath,
+function Compress-Repositories(
+    [string]$inPath,
+    [string]$outPath,
     [string]$7zPath = "7z"
 ) {
     # Get all child folders in the specified path
-    $folders = Get-ChildItem -Path $InPath -Directory
+    $folders = Get-ChildItem -Path $inPath -Directory
 
     # Loop through each folder
     foreach ($folder in $folders) {
@@ -12,7 +12,7 @@ function CompressRepositories(
         if ($folder.Name -match "\.git$") {
             # Define the name of the archive (folder name + .zip)
             $archiveName = $folder.Name + ".7z"
-            $archivePath = Join-Path -Path $OutPath -ChildPath $archiveName
+            $archivePath = Join-Path -Path $outPath -ChildPath $archiveName
             $files = Get-ChildItem -Path $folder.FullName
 
             # Use 7-Zip to compress the folder

@@ -1,5 +1,15 @@
+. $PSScriptRoot/BackupDriver.ps1
 . $PSScriptRoot/CompressionOperations.ps1
+. $PSScriptRoot/ConfigurationFileOperations.ps1
 . $PSScriptRoot/GitOperations.ps1
 
-Export-ModuleMember -Function 'MirrorListRepositories'
-Export-ModuleMember -Function 'CompressRepositories'
+$exportModuleMemberParams = @{
+    Function = @(
+        "Backup-GitRepositories",
+        "Compress-Repositories",
+        "Read-MirrorListFile",
+        "Sync-Repositories"
+    )
+}
+
+Export-ModuleMember @exportModuleMemberParams
