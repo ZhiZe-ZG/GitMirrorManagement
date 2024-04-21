@@ -82,7 +82,7 @@ function CompressRepositories(
             $files = Get-ChildItem -Path $folder.FullName
 
             # Use 7-Zip to compress the folder
-            & $7zPath a -t7z -mx7 $archivePath $files
+            & $7zPath a -t7z  -sccUTF-8 -scsUTF-8 $archivePath $files
         }
     }
         
